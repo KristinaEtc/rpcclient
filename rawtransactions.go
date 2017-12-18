@@ -306,6 +306,17 @@ func (c *Client) SendRawTransaction(tx *wire.MsgTx, allowHighFees bool) (*chainh
 	return c.SendRawTransactionAsync(tx, allowHighFees).Receive()
 }
 
+// My implementation. rgb(255, 0, 0)
+func (c *Client) SendCyberRawTransaction(tx string, allowHighFees bool) (*chainhash.Hash, error) {
+	transSend := c.SendCyberRawTransactionAsync(tx, allowHighFees)
+	return transSend.Receive()
+}
+
+func (c *Client) SendCyberRawTransactionAsync(txHex string, allowHighFees bool) FutureSendRawTransactionResult {
+	cmd := btcjson.NewSendRawTransactionCmd(txHex, &allowHighFees)
+	return c.sendCmd(cmd)
+}
+
 // FutureSignRawTransactionResult is a future promise to deliver the result
 // of one of the SignRawTransactionAsync family of RPC invocations (or an
 // applicable error).
